@@ -13,15 +13,23 @@ int main()
 	int rc = zmq_bind(responder, "tcp://*:5555");
 	assert(rc == 0);
 
-	while (1)
+	int i = 0;
+	while (i >= 0)
 	{
 		char buffer[10] = { 0 };
 		zmq_recv(responder, buffer, 10, 0);
-		printf("Received Hello\n");
+
+		char szSnd[10] = { 0 };
+		sprintf_s(szSnd, 10, "%s", buffer);
+		printf("Received ");
+		printf(szSnd);
+		printf("\n");
 
 		Sleep(1);
 
-		zmq_send(responder, "world", 5, 0);
+		char szSend[100] = { 0 };
+		sprintf_s(szSend, 100, "%s%d", "world", i);
+		zmq_send(responder, szSend, strlen(szSend), 0);
 	}
 	
     return 0;
